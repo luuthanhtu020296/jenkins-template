@@ -1,0 +1,38 @@
+pipeline {
+    agent { 
+        label 'linux'
+    }
+
+    parameters {
+        string(name: 'WEBSITE_VERSION', description: 'Enter the website version')
+        string(name: 'BUCKET_NAME', description: 'Enter the bucket name')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', credentialsId: '95598b0f-5f34-4404-bbed-657578cc4fc3', url: 'https://github.com/luuthanhtu020296/jenkins-template.git'            } 
+        }
+        stage('Build') {
+            steps {
+                script {
+                    // Perform any build steps if needed
+                    echo "Building the website..."
+                }
+            }
+        }
+        stage('Deploy to S3') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: "jenkins",
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh 'aws s3 sync . s3://${BUCKET_NAME}'
+                    // sh 'cat /home/ec2-user/work/workspace/demo-tos3/index.html'
+                }
+            }
+        } 
+    }
+}
