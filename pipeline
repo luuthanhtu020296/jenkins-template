@@ -77,7 +77,12 @@ pipeline {
                 }
             }
         }
-    }
+        stage('Slack Notify') {
+            steps {
+                slackSend channel: 'demo', message: 'test'
+            }
+        }        
+    }   
     post {
          always {  
             echo 'This will always run'  
