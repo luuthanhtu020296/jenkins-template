@@ -11,6 +11,6 @@ chmod +x ~/.docker/cli-plugins/docker-compose
 sudo mkdir ~/jenkins
 sudo chmod 666 ~/jenkins
 sudo usermod -aG docker $USER
-sudo chmod 666 /var/run/docker.sock
 sudo systemctl start docker
 sudo systemctl enable docker
+sudo chmod 666 /var/run/docker.sock
